@@ -1,116 +1,196 @@
-# MolytixDev – MVP v1.0 - Technical Documentation
+# Full-Stack Monorepo Architecture Starter
+
+Production-ready monorepo starter built with Turborepo, Next.js, Express, TypeScript, and Docker.
+
+Designed to provide a scalable foundation for SaaS applications with multiple frontend apps, shared packages, type-safe development workflows, and containerized environments.
 
 ## Table of Contents
 
-1. [Included apps and packages](#included-apps-and-packages)
-2. [Scope – MVP Features](#scope--mvp-features)
-3. [System Overview (Tech Stack)](#system-overview)
-4. [Functional Requirements](#functional-requirements)
+1. [Overview](#overview)
+2. [Architecture](#architecture)
+3. [Included Apps and Packages](#included-apps-and-packages)
+4. [Technology Stack](#technology-stack)
+5. [Key Features](#key-features)
+6. [Development Workflow](#development-workflow)
+7. [Getting Started](#getting-started)
+8. [Docker Usage](#docker-usage)
 
 ---
 
-## About this template
+## Overview
 
-## Included apps and packages
+This project demonstrates a scalable full-stack monorepo architecture using Turborepo and PNPM workspaces.
 
-- `@workspace/web`: A [Next.js](https://nextjs.org/) app.
-- `@workspace/admin`: A [Next.js](https://nextjs.org/) app.
-- `@workspace/api`: A [Node.js](https://nodejs.org) server, powered by [Express](https://express.dev/).
-- `@workspace/ui`: A package for shared ui components between apps.
-- `@workspace/eslint-config`: ESLint presets used by other apps.
-- `@workspace/typescript-config`: Base tsconfig.json files used by other apps.
-- A package builder service, responsible for automatically rebuilding shared packages on changes (in development only).
+The repository includes multiple applications, shared packages, centralized configuration, and Docker-based development environments. The goal is to reduce duplication, improve maintainability, and enable rapid development across multiple services.
 
-All apps and packages are built using [TypeScript](https://www.typescriptlang.org/).
+---
 
-### Docker
+## Architecture
 
-This project uses Docker and Docker Compose to build and run all apps. Additional services & environment variables can be added in `compose.yaml` for production, and `compose.dev.yaml` for development.
+The workspace follows a modular architecture:
 
-### Utilities
+- Multiple Next.js applications
+- Dedicated Express API service
+- Shared UI component library
+- Shared TypeScript configurations
+- Shared ESLint configurations
+- Centralized dependency management
+- Dockerized local and production environments
 
-- [PNPM](https://pnpm.io/) as the package manager
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+All packages are fully typed and integrated through workspace dependencies.
 
-Installing the relevant VSCode extensions is recommended.
+---
 
-## Run the project
+## Included Apps and Packages
 
-### Prerequisites
+### Applications
 
-- [Docker](https://www.docker.com/)
+#### `@workspace/web`
 
-In development, you'll also need:
+Customer-facing Next.js application.
 
-- [Node.js](https://nodejs.org/) 20
-- [PNPM](https://pnpm.io/)
+#### `@workspace/admin`
 
-### Running the services
+Administrative dashboard built with Next.js.
 
-Run the project using Docker Compose:
+#### `@workspace/api`
 
-```bash
-docker compose up -d
-```
+Express-based backend service responsible for business logic and API endpoints.
 
-The *Web* app will be available at [localhost:3000](http://localhost:3000), and the *Api* will be accessible from [localhost:8000](http://localhost:8000).
+---
 
-### Local development
+### Shared Packages
 
-Install dependencies using PNPM:
+#### `@workspace/ui`
+
+Reusable UI component library shared between frontend applications.
+
+#### `@workspace/typescript-config`
+
+Centralized TypeScript configuration.
+
+#### `@workspace/eslint-config`
+
+Shared linting configuration used across all applications.
+
+---
+
+## Technology Stack
+
+### Frontend
+
+- Next.js
+- React
+- TypeScript
+
+### Backend
+
+- Node.js
+- Express
+
+### Infrastructure
+
+- Docker
+- Docker Compose
+
+### Workspace Tooling
+
+- Turborepo
+- PNPM Workspaces
+
+### Developer Experience
+
+- ESLint
+- Prettier
+- TypeScript
+
+---
+
+## Key Features
+
+- Monorepo architecture using Turborepo
+- Shared UI package across multiple applications
+- Shared TypeScript types and configurations
+- Shared linting and code quality standards
+- Containerized development and deployment workflow
+- Automatic package rebuilding during development
+- Workspace-based dependency management
+- Consistent local and production environments
+
+---
+
+## Development Workflow
+
+### Install Dependencies
 
 ```bash
 pnpm install
 ```
 
-Use Docker Compose to run the project, making sure you use the development compose file:
+I'd position it as an **architecture project**, not an application project.
+
+The strongest thing here is not the features. It's the monorepo architecture, shared packages, Docker workflow, and type-safe full-stack setup.
+
+
+### Start Development Environment
 
 ```bash
 docker compose -f compose.dev.yaml up -d
 ```
 
-Then just open your web browser to access the Web at [localhost:3000](http://localhost:3000) and the Api at [localhost:8000](http://localhost:8000), just like in production.
+### Run Applications
 
-Any changes you make to the frontend during development will automatically be reflected in the browser, while any changes made to the backend code will cause the development server to restart. Both services will react to changes made to shared packages.
-
-## Configuration
-
-### Updating environment variables
-
-Environment variables for the entire project are stored in the `.env` file. After editing this file:
-
-- If any new variables were added, add them to the relevant services in `compose.yaml` (or `compose.dev.yaml` in development):
-
-  ```yml
-  frontend:
-    environment:
-      - ENV_VAR=${ENV_VAR}
-
-  backend:
-    environment:
-      - ENV_VAR=${ENV_VAR}
-  ```
-
-- Recreate the relevant services (use the correct compose file):
-
-  ```bash
-  docker compose up -d --force-recreate <services>
-  ```
-
-### Installing & updating dependencies
-
-To install dependencies in an app or package, run:
+Web Application
 
 ```bash
-pnpm -F @workspace/<app> i <dependencies>
+http://localhost:3000
 ```
 
-To install dependencies at the workspace root (usually dev dependencies), replace `-F @workspace/<app>` with `-w`.
-
-After dependency updates, rebuild the relevant services. If you installed dependencies in a package, rebuild all apps that use it & the package builder.
+API Service
 
 ```bash
-docker compose up -d --build <services>
+http://localhost:8000
 ```
+
+Changes made to shared packages are automatically propagated to dependent applications during development.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+* Node.js 20+
+* PNPM
+* Docker
+* Docker Compose
+
+### Install
+
+```bash
+pnpm install
+```
+
+### Start
+
+```bash
+docker compose -f compose.dev.yaml up -d
+```
+
+---
+
+## Docker Usage
+
+Production Environment
+
+```bash
+docker compose up -d
+```
+
+Development Environment
+
+```bash
+docker compose -f compose.dev.yaml up -d
+```
+
+Docker is used to ensure consistent environments across development and deployment workflows.
